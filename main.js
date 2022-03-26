@@ -128,7 +128,7 @@ function creationCarte(xmlCourse) {
   container.appendChild(card);
 }
 function creationChaine(nomSession, date, heure) {
-  var dateComplete = new Date(date + " " + heure);
+  var dateComplete = new Date(date + "T" + heure);
   return nomSession + ": " + dateComplete.toLocaleString("fr-FR");
 }
 ajax_get_request(getXML, "https://ergast.com/api/f1/current", true);
