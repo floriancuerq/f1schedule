@@ -65,7 +65,7 @@ function creationCarte(xmlCourse) {
   if (xmlCourse.getElementsByTagName("FirstPractice")[0] != undefined) {
     session.className += "list-group-item";
     session.innerHTML = creationChaine(
-      "Pratice 1",
+      "Practice 1",
       xmlCourse.getElementsByTagName("FirstPractice")[0].childNodes[1]
         .innerHTML,
       xmlCourse.getElementsByTagName("FirstPractice")[0].childNodes[3].innerHTML
@@ -78,7 +78,7 @@ function creationCarte(xmlCourse) {
     session = document.createElement("li");
     session.className += "list-group-item";
     session.innerHTML = creationChaine(
-      "Pratice 2",
+      "Practice 2",
       xmlCourse.getElementsByTagName("SecondPractice")[0].childNodes[1]
         .innerHTML,
       xmlCourse.getElementsByTagName("SecondPractice")[0].childNodes[3]
@@ -92,7 +92,7 @@ function creationCarte(xmlCourse) {
     session = document.createElement("li");
     session.className += "list-group-item";
     session.innerHTML = creationChaine(
-      "Pratice 3",
+      "Practice 3",
       xmlCourse.getElementsByTagName("ThirdPractice")[0].childNodes[1]
         .innerHTML,
       xmlCourse.getElementsByTagName("ThirdPractice")[0].childNodes[3].innerHTML
