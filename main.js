@@ -29,7 +29,10 @@ function getXML(res) {
   var Race = doc.getElementsByTagName("Race")[nb_race];
   var raceDate = Race.getElementsByTagName("Date")[0].childNodes[0].nodeValue;
 
-  while (Date.parse(raceDate) < Date.now()) {
+  while (
+    new Date(Date.parse(raceDate)).getDate() < new Date().getDate() &&
+    new Date(Date.parse(raceDate)).getUTCMonth() <= new Date().getUTCMonth()
+  ) {
     // tant que la date du gp est avant la date actuelle on continue
     Race = doc.getElementsByTagName("Race")[nb_race];
     raceDate = Race.getElementsByTagName("Date")[0].childNodes[0].nodeValue;
@@ -44,7 +47,6 @@ function getXML(res) {
   }
 }
 function creationCarte(xmlCourse) {
-
   var container = document.getElementById("container");
 
   var card = document.createElement("article");
