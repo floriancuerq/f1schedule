@@ -29,15 +29,16 @@ function getXML(res) {
   var Race = doc.getElementsByTagName("Race")[nb_race];
   var raceDate = Race.getElementsByTagName("Date")[0].childNodes[0].nodeValue;
 
+  console.log(new Date(Date.parse(raceDate)).getDate())
   while (
-    new Date(Date.parse(raceDate)).getDate() < new Date().getDate() &&
-    new Date(Date.parse(raceDate)).getUTCMonth() <= new Date().getUTCMonth()
+    new Date(Date.parse(raceDate)) <= new Date()
   ) {
     // tant que la date du gp est avant la date actuelle on continue
     Race = doc.getElementsByTagName("Race")[nb_race];
     raceDate = Race.getElementsByTagName("Date")[0].childNodes[0].nodeValue;
     nb_race++;
   }
+  
   while (doc.getElementsByTagName("Race")[nb_race - 1] != undefined) {
     // tant qu'il y a des courses on cree des cartes
 
