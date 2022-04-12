@@ -1,3 +1,4 @@
+possibleSession = ["FirstPractice","SecondPractice","Sprint","Qualifying","ThirdPractice"];
 function ajax_get_request(callback, url, async = true) {
   // Instanciation d'un objet XHR
   var xhr = new XMLHttpRequest();
@@ -62,70 +63,12 @@ function creationCarte(xmlCourse) {
 
   var listContainer = document.createElement("ul");
   listContainer.className += "list-group list-group-flush";
-
-  var session = document.createElement("li");
-  // Practice 1
-  if (xmlCourse.getElementsByTagName("FirstPractice")[0] != undefined) {
-    session.className += "list-group-item";
-    session.innerHTML = creationChaine(
-      "Practice 1",
-      xmlCourse.getElementsByTagName("FirstPractice")[0].childNodes[1]
-        .innerHTML,
-      xmlCourse.getElementsByTagName("FirstPractice")[0].childNodes[3].innerHTML
-    );
-    listContainer.appendChild(session);
-  }
-
-  // Pratice 2
-  if (xmlCourse.getElementsByTagName("SecondPractice")[0] != undefined) {
-    session = document.createElement("li");
-    session.className += "list-group-item";
-    session.innerHTML = creationChaine(
-      "Practice 2",
-      xmlCourse.getElementsByTagName("SecondPractice")[0].childNodes[1]
-        .innerHTML,
-      xmlCourse.getElementsByTagName("SecondPractice")[0].childNodes[3]
-        .innerHTML
-    );
-    listContainer.appendChild(session);
-  }
-
-  // Practice 3
-  if (xmlCourse.getElementsByTagName("ThirdPractice")[0] != undefined) {
-    session = document.createElement("li");
-    session.className += "list-group-item";
-    session.innerHTML = creationChaine(
-      "Practice 3",
-      xmlCourse.getElementsByTagName("ThirdPractice")[0].childNodes[1]
-        .innerHTML,
-      xmlCourse.getElementsByTagName("ThirdPractice")[0].childNodes[3].innerHTML
-    );
-    listContainer.appendChild(session);
-  }
-
-  // Qualifying
-  if (xmlCourse.getElementsByTagName("Qualifying")[0] != undefined) {
-    session = document.createElement("li");
-    session.className += "list-group-item";
-    session.innerHTML = creationChaine(
-      "Qualifying",
-      xmlCourse.getElementsByTagName("Qualifying")[0].childNodes[1].innerHTML,
-      xmlCourse.getElementsByTagName("Qualifying")[0].childNodes[3].innerHTML
-    );
-
-    listContainer.appendChild(session);
-  }
-  // Sprint
-  if (xmlCourse.getElementsByTagName("Sprint")[0] != undefined) {
-    session = document.createElement("li");
-    session.className += "list-group-item";
-    session.innerHTML = creationChaine(
-      "Sprint",
-      xmlCourse.getElementsByTagName("Sprint")[0].childNodes[1].innerHTML,
-      xmlCourse.getElementsByTagName("Sprint")[0].childNodes[3].innerHTML
-    );
-
-    listContainer.appendChild(session);
+  
+  for(i=0;i < xmlCourse.childNodes.length;i++){ // Creation des session sauf course
+    if(possibleSession.includes(xmlCourse.childNodes[i].nodeName)){
+      
+      creationSession(listContainer,xmlCourse.childNodes[i]);
+    }
   }
   // Race
   session = document.createElement("li");
@@ -140,6 +83,17 @@ function creationCarte(xmlCourse) {
   card.appendChild(listContainer);
 
   container.appendChild(card);
+}
+function creationSession(listContainer,xmlSession){
+  let session = document.createElement("li");
+  session.className += "list-group-item";
+  session.innerHTML = creationChaine(
+    xmlSession.nodeName,
+    xmlSession.getElementsByTagName("Date")[0].childNodes[0].textContent,
+    xmlSession.getElementsByTagName("Time")[0].childNodes[0].textContent
+  );
+
+  listContainer.appendChild(session);
 }
 function creationChaine(nomSession, date, heure) {
   var dateComplete = new Date(date + "T" + heure);
