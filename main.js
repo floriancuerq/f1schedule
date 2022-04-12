@@ -115,7 +115,18 @@ function creationCarte(xmlCourse) {
 
     listContainer.appendChild(session);
   }
+  // Sprint
+  if (xmlCourse.getElementsByTagName("Sprint")[0] != undefined) {
+    session = document.createElement("li");
+    session.className += "list-group-item";
+    session.innerHTML = creationChaine(
+      "Sprint",
+      xmlCourse.getElementsByTagName("Sprint")[0].childNodes[1].innerHTML,
+      xmlCourse.getElementsByTagName("Sprint")[0].childNodes[3].innerHTML
+    );
 
+    listContainer.appendChild(session);
+  }
   // Race
   session = document.createElement("li");
   session.className += "list-group-item";
