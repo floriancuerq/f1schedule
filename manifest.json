@@ -1,0 +1,33 @@
+{
+    "name": "F1 schedule",
+    "short_name": "F1-schedule",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "orientation": "portrait-primary",
+    "icons": [
+      {
+        "src": "/images/mstile-70x70.png",
+        "type": "image/png", "sizes": "70x70"
+      },
+      {
+        "src": "/images/mstile-144x144.png",
+        "type": "image/png", "sizes": "144x144"
+      },
+      {
+        "src": "/images/mstile-150x150.png",
+        "type": "image/png", "sizes": "150x150"
+      },
+      {
+        "src": "/images/android-chrome-192x192.png",
+        "type": "image/png", "sizes": "192x192"
+      },
+
+      {
+        "src": "/images/android-chrome-512x512.png",
+        "type": "image/png", "sizes": "512x512"
+      }
+    ]
+  }
+  

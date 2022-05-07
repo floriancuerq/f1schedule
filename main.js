@@ -100,3 +100,14 @@ function creationChaine(nomSession, date, heure) {
   return nomSession + ": " + dateComplete.toLocaleString("fr-FR");
 }
 ajax_get_request(getXML, "https://ergast.com/api/f1/current", true);
+
+
+// PWA
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker
+      .register("/serviceWorker.js")
+      .then(res => console.log("service worker registered"))
+      .catch(err => console.log("service worker not registered", err));
+  });
+}
