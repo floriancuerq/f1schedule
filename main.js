@@ -79,10 +79,10 @@ function creationCarte(jsonCourse) {
   var card = document.createElement("div");
   card.className = "card mb-4";
 
-  // Create the card header
+  // Create the card header with inline red color
   var cardHeader = document.createElement("div");
   cardHeader.className = "card-header text-white";
-  cardHeader.style.backgroundColor = "#E10600";
+  cardHeader.style.backgroundColor = "#E10600"; // Formula 1 red color
   cardHeader.innerHTML = jsonCourse.raceName;
   card.appendChild(cardHeader);
 
@@ -94,6 +94,9 @@ function creationCarte(jsonCourse) {
   var listContainer = document.createElement("ul");
   listContainer.className = "list-group list-group-flush";
 
+  // Array to store session elements
+  var sessions = [];
+
   // Iterate over possible sessions and create session elements
   for (item in jsonCourse) {
     if (possibleSession.includes(item.toLowerCase())) {
@@ -102,7 +105,8 @@ function creationCarte(jsonCourse) {
         date: jsonCourse[item].date,
         time: jsonCourse[item].time
       };
-      creationSession(listContainer, session);
+      let sessionElement = creationSession(session);
+      sessions.push({ element: sessionElement, date: new Date(session.date + "T" + session.time) });
     }
   }
 
@@ -114,7 +118,15 @@ function creationCarte(jsonCourse) {
     jsonCourse.date,
     jsonCourse.time
   );
-  listContainer.appendChild(raceSession);
+  sessions.push({ element: raceSession, date: new Date(jsonCourse.date + "T" + jsonCourse.time) });
+
+  // Sort the sessions by date
+  sessions.sort((a, b) => a.date - b.date);
+
+  // Append the sorted session elements to the list container
+  sessions.forEach(session => {
+    listContainer.appendChild(session.element);
+  });
 
   // Append the list container to the card body
   cardBody.appendChild(listContainer);
@@ -126,7 +138,7 @@ function creationCarte(jsonCourse) {
   container.appendChild(card);
 }
 
-function creationSession(listContainer, jsonSession) {
+function creationSession(jsonSession) {
   let session = document.createElement("li");
   session.className = "list-group-item";
   session.innerHTML = creationChaine(
@@ -134,24 +146,7 @@ function creationSession(listContainer, jsonSession) {
     jsonSession.date,
     jsonSession.time
   );
-  listContainer.appendChild(session);
-}
-
-function creationChaine(nomSession, date, heure) {
-  var dateComplete = new Date(date + "T" + heure);
-  return `<strong>${nomSession}:</strong> ${dateComplete.toLocaleString("fr-FR")}`;
-}
-
-function creationSession(listContainer, jsonSession) {
-  let session = document.createElement("li");
-  session.className += "list-group-item";
-  session.innerHTML = creationChaine(
-    jsonSession.sessionName,
-    jsonSession.date,
-    jsonSession.time
-  );
-
-  listContainer.appendChild(session);
+  return session;
 }
 function creationChaine(nomSession, date, heure) {
   var dateComplete = new Date(date + "T" + heure);
