@@ -99,8 +99,8 @@ function creationCarte(jsonCourse) {
     if (possibleSession.includes(item.toLowerCase())) {
       let session = {
         sessionName: item,
-        date: jsonCourse.date,
-        time: jsonCourse.time
+        date: jsonCourse[item].date,
+        time: jsonCourse[item].time
       };
       creationSession(listContainer, session);
     }
