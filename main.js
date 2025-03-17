@@ -1,4 +1,4 @@
-possibleSession = ["FirstPractice","SecondPractice","Sprint","Qualifying","ThirdPractice"];
+possibleSession = ["firstpractice","secondpractice","sprint","qualifying","thirdpractice","sprintqualifying"];
 function ajax_get_request(callback, url, async = true) {
   // Instanciation d'un objet XHR
   var xhr = new XMLHttpRequest();
@@ -48,7 +48,31 @@ function getXML(res) {
     nb_race++;
   }
 }
-function creationCarte(xmlCourse) {
+function getJSON(res) {
+  const data = JSON.parse(res);
+  var nb_race = 0;
+  var Race = data.MRData.RaceTable.Races[nb_race];
+  var raceDate = Race.date;
+
+  console.log(new Date(Date.parse(raceDate)).getDate())
+  while (
+    new Date(Date.parse(raceDate)) <= new Date()
+  ) {
+    // tant que la date du gp est avant la date actuelle on continue
+    Race = data.MRData.RaceTable.Races[nb_race];
+    raceDate = Race.date;
+    nb_race++;
+  }
+
+  while (data.MRData.RaceTable.Races[nb_race - 1] != undefined) {
+    // tant qu'il y a des courses on cree des cartes
+
+    Race = data.MRData.RaceTable.Races[nb_race - 1];
+    creationCarte(Race);
+    nb_race++;
+  }
+}
+function creationCarte(jsonCourse) {
   var container = document.getElementById("container");
 
   var card = document.createElement("article");
@@ -57,26 +81,33 @@ function creationCarte(xmlCourse) {
   var titleGP = document.createElement("h2");
   titleGP.className += "card-header";
   titleGP.id = "Name";
-  titleGP.innerHTML =
-    xmlCourse.getElementsByTagName("RaceName")[0].childNodes[0].nodeValue;
+  titleGP.innerHTML = jsonCourse.raceName;
   card.appendChild(titleGP);
 
   var listContainer = document.createElement("ul");
   listContainer.className += "list-group list-group-flush";
   
-  for(i=0;i < xmlCourse.childNodes.length;i++){ // Creation des session sauf course
-    if(possibleSession.includes(xmlCourse.childNodes[i].nodeName)){
-      
-      creationSession(listContainer,xmlCourse.childNodes[i]);
+
+  for (item in jsonCourse) {  
+    if(possibleSession.includes(item.toLowerCase())){
+      let session = {
+        sessionName: item,
+        date: jsonCourse.date,
+        time: jsonCourse.time
+      }
+      creationSession(listContainer,session);
     }
+    
   }
+
+
   // Race
-  session = document.createElement("li");
+  let session = document.createElement("li");
   session.className += "list-group-item";
   session.innerHTML = creationChaine(
     "Race",
-    xmlCourse.getElementsByTagName("Date")[0].childNodes[0].nodeValue,
-    xmlCourse.getElementsByTagName("Time")[0].childNodes[0].textContent
+    jsonCourse.date,
+    jsonCourse.time
   );
   listContainer.appendChild(session);
 
@@ -84,13 +115,13 @@ function creationCarte(xmlCourse) {
 
   container.appendChild(card);
 }
-function creationSession(listContainer,xmlSession){
+function creationSession(listContainer, jsonSession) {
   let session = document.createElement("li");
   session.className += "list-group-item";
   session.innerHTML = creationChaine(
-    xmlSession.nodeName,
-    xmlSession.getElementsByTagName("Date")[0].childNodes[0].textContent,
-    xmlSession.getElementsByTagName("Time")[0].childNodes[0].textContent
+    jsonSession.sessionName,
+    jsonSession.date,
+    jsonSession.time
   );
 
   listContainer.appendChild(session);
@@ -99,7 +130,10 @@ function creationChaine(nomSession, date, heure) {
   var dateComplete = new Date(date + "T" + heure);
   return nomSession + ": " + dateComplete.toLocaleString("fr-FR");
 }
-ajax_get_request(getXML, "https://ergast.com/api/f1/current", true);
+
+currentYear = new Date().getFullYear() 
+
+ajax_get_request(getJSON, "https://api.jolpi.ca/ergast/f1/" + currentYear, true);
 
 
 // PWA
