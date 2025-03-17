@@ -75,46 +75,73 @@ function getJSON(res) {
 function creationCarte(jsonCourse) {
   var container = document.getElementById("container");
 
-  var card = document.createElement("article");
-  card.className += "GP card";
+  // Create the card container
+  var card = document.createElement("div");
+  card.className = "card mb-4";
 
-  var titleGP = document.createElement("h2");
-  titleGP.className += "card-header";
-  titleGP.id = "Name";
-  titleGP.innerHTML = jsonCourse.raceName;
-  card.appendChild(titleGP);
+  // Create the card header
+  var cardHeader = document.createElement("div");
+  cardHeader.className = "card-header text-white";
+  cardHeader.style.backgroundColor = "#E10600";
+  cardHeader.innerHTML = jsonCourse.raceName;
+  card.appendChild(cardHeader);
 
+  // Create the card body
+  var cardBody = document.createElement("div");
+  cardBody.className = "card-body";
+
+  // Create the list container for sessions
   var listContainer = document.createElement("ul");
-  listContainer.className += "list-group list-group-flush";
-  
+  listContainer.className = "list-group list-group-flush";
 
-  for (item in jsonCourse) {  
-    if(possibleSession.includes(item.toLowerCase())){
+  // Iterate over possible sessions and create session elements
+  for (item in jsonCourse) {
+    if (possibleSession.includes(item.toLowerCase())) {
       let session = {
         sessionName: item,
         date: jsonCourse.date,
         time: jsonCourse.time
-      }
-      creationSession(listContainer,session);
+      };
+      creationSession(listContainer, session);
     }
-    
   }
 
-
-  // Race
-  let session = document.createElement("li");
-  session.className += "list-group-item";
-  session.innerHTML = creationChaine(
+  // Create the race session element
+  let raceSession = document.createElement("li");
+  raceSession.className = "list-group-item";
+  raceSession.innerHTML = creationChaine(
     "Race",
     jsonCourse.date,
     jsonCourse.time
   );
-  listContainer.appendChild(session);
+  listContainer.appendChild(raceSession);
 
-  card.appendChild(listContainer);
+  // Append the list container to the card body
+  cardBody.appendChild(listContainer);
 
+  // Append the card body to the card
+  card.appendChild(cardBody);
+
+  // Append the card to the container
   container.appendChild(card);
 }
+
+function creationSession(listContainer, jsonSession) {
+  let session = document.createElement("li");
+  session.className = "list-group-item";
+  session.innerHTML = creationChaine(
+    jsonSession.sessionName,
+    jsonSession.date,
+    jsonSession.time
+  );
+  listContainer.appendChild(session);
+}
+
+function creationChaine(nomSession, date, heure) {
+  var dateComplete = new Date(date + "T" + heure);
+  return `<strong>${nomSession}:</strong> ${dateComplete.toLocaleString("fr-FR")}`;
+}
+
 function creationSession(listContainer, jsonSession) {
   let session = document.createElement("li");
   session.className += "list-group-item";
